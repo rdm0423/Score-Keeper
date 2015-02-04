@@ -7,6 +7,7 @@
 //
 
 #import "SKScoreViewController.h"
+#import "QuartzCore/QuartzCore.h"   // Added this to allow for score to be rounded as UILabel
 
 static CGFloat margin = 15;
 //static CGFloat spacing = 20;
@@ -28,11 +29,12 @@ static CGFloat margin = 15;
     UIScrollView *scrollView = [[UIScrollView alloc] initWithFrame: CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)];
     scrollView.contentSize = CGSizeMake(self.view.frame.size.width, self.view.frame.size.height + 10);
     [self setTitle:@"Score Keeper"];
+    //[setTitle setFont:[UIFont boldSystemFontOfSize:[UIFont systemFontSize]]];
     [self.view addSubview:scrollView];
 
     for (int i = 0; i < 4; i++) {
         [self addScoreView:i];
-        
+
     }
 }
 
@@ -42,38 +44,54 @@ static CGFloat margin = 15;
 {
 
     CGFloat width = self.view.frame.size.width;
-    CGFloat height = self.view.frame.size.height/4;
+    CGFloat frameHeight = 55;
+    CGFloat height = self.view.frame.size.height / 4;
     CGFloat widthOfColumn = self.view.frame.size.width / 3 + margin;
+    CGFloat yScoreRows = 75;            //self.view.frame.size.height
+    CGFloat yScoreRowStepper = 85;
     
     UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, height * index, width, height)];
-    [view setBackgroundColor:[UIColor blueColor]];
+    [view setBackgroundColor:[UIColor whiteColor]];
     
-    UITextField *name = [[UITextField alloc] initWithFrame: CGRectMake(margin, 64, 50, 50)];
+    //UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, frameHeight * index, width, height)];
+    //[view setBackgroundColor:[UIColor cyanColor]];
+    
+    UITextField *name = [[UITextField alloc] initWithFrame: CGRectMake(margin, yScoreRows, 75, 50)];
+    name.borderStyle = UITextBorderStyleRoundedRect;
     name.tag = -1000;
     name.delegate = self;
     name.placeholder = @"name";
     name.backgroundColor = [UIColor lightGrayColor];
+    
   
     
-    UILabel *score = [[UILabel alloc] initWithFrame: CGRectMake(widthOfColumn, 64, 50, 50)];
-    [score setBackgroundColor:[UIColor greenColor]];
+    UILabel *score = [[UILabel alloc] initWithFrame: CGRectMake(widthOfColumn, yScoreRows, 50, 50)];
+    [score setBackgroundColor:[UIColor cyanColor]];
     score.textAlignment = NSTextAlignmentCenter;
+    score.layer.cornerRadius = 5.0; // supposed to create round edges
+    score.layer.masksToBounds = YES; // Allows the rounded edges to happen
     [self.scoreLabels addObject:score];
     [score setText:@"0"];
     
     
-    UIStepper *stepper = [[UIStepper alloc] initWithFrame:CGRectMake((widthOfColumn * 2) - 25, 70, 80, 80)];
+    UIStepper *stepper = [[UIStepper alloc] initWithFrame:CGRectMake((widthOfColumn * 2) - 25, yScoreRowStepper, 80, 80)];
     stepper.maximumValue = 1000;
     stepper.minimumValue = -1000;
     stepper.tag = index;
-    
     [stepper addTarget:self action:@selector(stepperChanges:) forControlEvents:UIControlEventValueChanged];
     
+    // QUESTION - how can the screen auto adjust up so when keyboard shows you can still see name field where you are entering text????????
+    
+    UILabel *borderDivide = [[UILabel alloc] initWithFrame:CGRectMake(margin, 130, self.view.frame.size.width, 5)];
+    [borderDivide setBackgroundColor:[UIColor grayColor]];
+    borderDivide.layer.cornerRadius = 5.0;
+    borderDivide.layer.masksToBounds = YES;
     
     [self.view addSubview:view];
     [view addSubview:stepper];
     [view addSubview:score];
     [view addSubview:name];
+    [view addSubview:borderDivide];
 
 }
 

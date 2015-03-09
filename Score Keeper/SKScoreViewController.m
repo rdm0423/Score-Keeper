@@ -44,7 +44,7 @@ static CGFloat margin = 15;
 {
 
     CGFloat width = self.view.frame.size.width;
-    CGFloat frameHeight = 55;
+    //CGFloat frameHeight = 55;
     CGFloat height = self.view.frame.size.height / 4;
     CGFloat widthOfColumn = self.view.frame.size.width / 3 + margin;
     CGFloat yScoreRows = 75;            //self.view.frame.size.height
@@ -53,26 +53,22 @@ static CGFloat margin = 15;
     UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, height * index, width, height)];
     [view setBackgroundColor:[UIColor whiteColor]];
     
-    //UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, frameHeight * index, width, height)];
-    //[view setBackgroundColor:[UIColor cyanColor]];
-    
     UITextField *name = [[UITextField alloc] initWithFrame: CGRectMake(margin, yScoreRows, 75, 50)];
     name.borderStyle = UITextBorderStyleRoundedRect;
+    name.borderStyle = UITextBorderStyleBezel;
     name.tag = -1000;
     name.delegate = self;
     name.placeholder = @"name";
-    name.backgroundColor = [UIColor lightGrayColor];
-    
-  
+    //name.backgroundColor = [UIColor lightGrayColor];
     
     UILabel *score = [[UILabel alloc] initWithFrame: CGRectMake(widthOfColumn, yScoreRows, 50, 50)];
     [score setBackgroundColor:[UIColor cyanColor]];
     score.textAlignment = NSTextAlignmentCenter;
     score.layer.cornerRadius = 5.0; // supposed to create round edges
     score.layer.masksToBounds = YES; // Allows the rounded edges to happen
+    score.layer.borderWidth = 2;    //creates border around the label
     [self.scoreLabels addObject:score];
     [score setText:@"0"];
-    
     
     UIStepper *stepper = [[UIStepper alloc] initWithFrame:CGRectMake((widthOfColumn * 2) - 25, yScoreRowStepper, 80, 80)];
     stepper.maximumValue = 1000;
